@@ -2,7 +2,7 @@
 AppDynamics REST API Library
 ============================
 
-Current version: 0.4.18
+Current version: 0.4.19
 
 
 Introduction
@@ -13,7 +13,7 @@ REST API of an AppDynamics controller.
 
 AppDynamicsREST is developed using Python 2.7.6 on Mac OSX. It is known to
 work on most Linux distributions and on Windows, with your choice of Python 2.6, 2.7,
-3.3, or 3.4.
+3.3, 3.4, 3.5, 3.6, 3.7, or 3.8.
 
 
 Installation
@@ -21,11 +21,11 @@ Installation
 
 Install via ``pip``::
 
-    $ pip install AppDynamicsREST
+    $ pip install git+https://github.com/homedepot/AppDynamicsREST#egg=AppDynamicsREST
 
 Install from source::
 
-    $ git clone git://github.com/appdynamics/AppDynamicsREST.git
+    $ git clone https://github.com/homedepot/AppDynamicsREST.git
     $ cd AppDynamicsREST
     $ python setup.py install
 
@@ -37,8 +37,7 @@ Prerequisites
  * `argparse <https://pypi.python.org/pypi/argparse>`_
  * `nose <https://pypi.python.org/pypi/nose>`_ (for running unit tests)
  * `tzlocal <https://pypi.python.org/pypi/tzlocal>`_ and
-   `lxml <https://pypi.python.org/pypi/lxml>`_
-   (used by some of the example scripts)
+   `lxml <https://pypi.python.org/pypi/lxml>`_ (used by some of the example scripts)
  * `jinja2 <https://pypi.python,org/pypi/jinja2>`_ (used by the audit report example)
 
 
@@ -80,11 +79,8 @@ For More Information
 
 The main source repo is on Github_.
 
-To ask a question or join the discussion, visit the AppDynamics `Community page`_.
-
 
 
 .. _AppDynamics: http://www.appdynamics.com/
-.. _Github: https://github.com/appdynamics/AppDynamicsREST
-.. _Community page: http://community.appdynamics.com/t5/eXchange-Community-AppDynamics/Python-SDK-for-Controller-REST-API/idi-p/917
-.. _readthedocs.org: http://appdynamicsrest.readthedocs.org/en/latest/
+.. _Github: https://github.com/homedepot/AppDynamicsREST
+.. _readthedocs.org: http://AppDynamicsREST.readthedocs.org/en/latest/

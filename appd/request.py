@@ -10,6 +10,8 @@ import requests
 
 from datetime import datetime
 
+from urllib import parse
+
 from appd.model.account import *
 from appd.model.application import *
 from appd.model.config_variable import *
@@ -148,6 +150,17 @@ class AppDynamicsClient(object):
             self._session.verify = self.verify
         return self._session
 
+    def _request(self, **request_args):
+        s = self._get_session()
+        req = requests.Request(**request_args)
+
+        prepped = s.prepare_request(req)
+
+        # Merge environment settings into session
+        settings = s.merge_environment_settings(prepped.url, {}, None, None, None)
+
+        return s.send(prepped, **settings)
+
     def upload(self, path, data, filename='default'):
         """
         Workaround a bug between requests file upload boundary format
@@ -167,6 +180,9 @@ class AppDynamicsClient(object):
 
         c = pycurl.Curl()
         b = BytesIO()
+
+        c.setopt(c.SSL_VERIFYPEER, int(self.verify))
+        c.setopt(c.SSL_VERIFYHOST, int(self.verify))
 
         c.setopt(c.WRITEDATA, b)
         c.setopt(c.URL, url)
@@ -204,11 +220,11 @@ class AppDynamicsClient(object):
             print('Retrieving ' + url, self._auth, params)
 
         if method == 'GET' or query:
-            r = self._get_session().request(method, url, auth=self._auth, params=params, headers=headers)
+            r = self._request(method=method, url=url, auth=self._auth, params=params, headers=headers)
         else:
             if not headers:
                 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-            r = self._get_session().request(method, url, auth=self._auth, data=json.dumps(params), headers=headers)
+            r = self._request(method=method, url=url, auth=self._auth, data=json.dumps(params), headers=headers)
 
         if r.status_code != requests.codes.ok:
             print(url, file=sys.stderr)
@@ -220,7 +236,7 @@ class AppDynamicsClient(object):
         app_id = app_id if isinstance(app_id, int) or isinstance(app_id, str) else self._app_id
         if not app_id:
             raise ValueError('application id is required')
-        path = '/controller/rest/applications/%s' % app_id + (path or '')
+        path = '/controller/rest/applications/%s' % parse.quote(str(app_id)) + (path or '')
         return path
 
     def get_metric_tree(self, app_id=None, metric_path=None, recurse=False):
@@ -236,15 +252,15 @@ class AppDynamicsClient(object):
         :rtype: appd.model.MetricTreeNodes
         """
         parent = None
-        if metric_path:
+        if metric_path is not None:
             parent = MetricTreeNode(parent=None, node_name=metric_path, node_type='folder')
         return self._get_metric_tree(app_id, parent=parent, recurse=recurse)
 
     def _get_metric_tree(self, app_id=None, parent=None, recurse=False):
         params = {}
-        if parent:
+        if parent is not None:
             params['metric-path'] = parent.path
-        path = '/applications/%d/metrics' % app_id
+        path = self._app_path(app_id, '/metrics')
         nodes = MetricTreeNodes.from_json(self.request(path, params), parent)
         if recurse:
             for node in nodes:
@@ -358,7 +374,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         files = {'file': ('healthrules.xml', xml)}
-        r = self._get_session().request('POST', url, auth=self._auth, params=params, files=files)
+        r = self._request(method='POST', url=url, auth=self._auth, params=params, files=files)
         return r.text
 
     def export_entry_point_type(self, application_id, entry_point_type, rule_type, tier=None, rule_name=None):
@@ -413,7 +429,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         files = {'file': ('entrypoints.xml', xml)}
-        r = self._get_session().request('POST', url, auth=self._auth, files=files)
+        r = self._request(method='POST', url=url, auth=self._auth, files=files)
         return r.text
 
     def export_entry_points(self, application_id, rule_type, tier=None):
@@ -459,7 +475,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         files = {'file': ('entrypoints.xml', xml)}
-        r = self._get_session().request('POST', url, auth=self._auth, files=files)
+        r = self._request(method='POST', url=url, auth=self._auth, files=files)
         return r.text
 
     def export_analytics_dynamic_service_configs(self, application_id):
@@ -493,7 +509,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         files = {'file': ('actions.xml', xml)}
-        r = self._get_session().request('POST', url, auth=self._auth, files=files)
+        r = self._request(method='POST', url=url, auth=self._auth, files=files)
         return r.text
 
     def export_custom_dashboard(self, dashboard_id):
@@ -577,7 +593,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         files = {'file': ('actions.json', json)}
-        r = self._get_session().request('POST', url, auth=self._auth, files=files)
+        r = self._request(method='POST', url=url, auth=self._auth, files=files)
         return r.text
 
     def export_email_action_templates(self):
@@ -605,7 +621,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         files = {'file': ('actions.json', json)}
-        r = self._get_session().request('POST', url, auth=self._auth, files=files)
+        r = self._request(method='POST', url=url, auth=self._auth, files=files)
         return r.text
 
     def export_httprequest_action_templates(self):
@@ -633,7 +649,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         files = {'file': ('actions.json', json)}
-        r = self._get_session().request('POST', url, auth=self._auth, files=files)
+        r = self._request(method='POST', url=url, auth=self._auth, files=files)
         return r.text
 
     def get_config(self):
@@ -801,7 +817,8 @@ class AppDynamicsClient(object):
 
         params = self._validate_time_range(time_range_type, duration_in_mins, start_time, end_time)
         params.update({'metric-path': metric_path,
-                       'rollup': rollup})
+                       'rollup': rollup,
+                       'output': 'JSON'})
 
         return self._app_request(MetricData, '/metric-data', app_id, params)
 
@@ -889,7 +906,7 @@ class AppDynamicsClient(object):
         url = self._base_url + path
 
         headers = {'Content-type': 'text/xml', 'Accept': 'text/plain'}
-        r = self._get_session().request('POST', url, auth=self._auth, params=params, data=xml, headers=headers)
+        r = self._request(method='POST', url=url, auth=self._auth, params=params, data=xml, headers=headers)
 
         return r
 

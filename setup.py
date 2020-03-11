@@ -6,7 +6,6 @@
 from setuptools import setup
 import io
 import os
-import sys
 
 import appd
 
@@ -22,16 +21,19 @@ def read(*filenames, **kwargs):
             buf.append(f.read())
     return sep.join(buf)
 
+
 setup(name='AppDynamicsREST',
       version=appd.__version__,
       description='AppDynamics REST API Library',
       long_description=read('README.rst'),
       author='Todd Radel',
       author_email='tradel@appdynamics.com',
-      url='https://github.com/tradel/AppDynamicsREST',
+      maintainer='Mike Phillipson',
+      maintainer_email='MICHAEL_PHILLIPSON1@homedepot.com',
+      url='https://github.com/homedepot/AppDynamicsREST',
       packages=['appd','appd.model'],
       platforms='any',
-      package_data={'': ['README.md', 'data/*', 'examples/*', 'templates/*']},
+      package_data={'': ['README.rst', 'data/*', 'examples/*', 'templates/*']},
       install_requires=['requests', 'argparse', 'future', 'pycurl'],
       extras_require={'examples': ['lxml', 'tzlocal', 'jinja2'], 'testing': ['nose']},
       test_suite='nose.collector',
@@ -50,5 +52,9 @@ setup(name='AppDynamicsREST',
           'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3',
           'Programming Language :: Python :: 3.3',
-          'Programming Language :: Python :: 3.4'],
-)
+          'Programming Language :: Python :: 3.4',
+          'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8'
+      ])
