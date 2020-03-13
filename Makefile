@@ -35,7 +35,7 @@ clean-test:
 	rm -fr htmlcov/
 
 lint:
-	flake8 AppDynamicsREST tests
+	flake8 AppDynamicsRESTx tests
 
 test:
 	python setup.py test
@@ -44,7 +44,7 @@ test-all:
 	tox
 
 coverage:
-	coverage run --source AppDynamicsREST setup.py test
+	coverage run --source AppDynamicsRESTx setup.py test
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
@@ -52,7 +52,7 @@ coverage:
 docs:
 	rm -f docs/AppDynamicsREST.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ AppDynamicsREST
+	sphinx-apidoc -o docs/ AppDynamicsRESTx
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	open docs/_build/html/index.html

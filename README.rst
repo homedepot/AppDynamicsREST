@@ -2,16 +2,16 @@
 AppDynamics REST API Library
 ============================
 
-Current version: 0.4.19
+Current version: 0.4.20
 
 
 Introduction
 ------------
 
-AppDynamicsREST is a library that provides a clean Python interface to the
+AppDynamicsRESTx is a library that provides a clean Python interface to the
 REST API of an AppDynamics controller.
 
-AppDynamicsREST is developed using Python 2.7.6 on Mac OSX. It is known to
+AppDynamicsRESTx is developed using Python 2.7.6 on Mac OSX. It is known to
 work on most Linux distributions and on Windows, with your choice of Python 2.6, 2.7,
 3.3, 3.4, 3.5, 3.6, 3.7, or 3.8.
 
@@ -21,12 +21,12 @@ Installation
 
 Install via ``pip``::
 
-    $ pip install git+https://github.com/homedepot/AppDynamicsREST#egg=AppDynamicsREST
+    $ pip install AppDynamicsRESTx
 
 Install from source::
 
-    $ git clone https://github.com/homedepot/AppDynamicsREST.git
-    $ cd AppDynamicsREST
+    $ git clone https://github.com/homedepot/AppDynamicsRESTx.git
+    $ cd AppDynamicsRESTx
     $ python setup.py install
 
 
@@ -82,5 +82,5 @@ The main source repo is on Github_.
 
 
 .. _AppDynamics: http://www.appdynamics.com/
-.. _Github: https://github.com/homedepot/AppDynamicsREST
+.. _Github: https://github.com/homedepot/AppDynamicsRESTx
 .. _readthedocs.org: http://AppDynamicsREST.readthedocs.org/en/latest/

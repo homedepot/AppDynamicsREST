@@ -18,3 +18,4 @@ creds/
 *.svg
 bin/
 .ropeproject
+venv/

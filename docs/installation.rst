@@ -4,9 +4,9 @@ Installation
 
 At the command line::
 
-    $ easy_install AppDynamicsREST
+    $ easy_install AppDynamicsRESTx
 
 Or, if you have virtualenvwrapper installed::
 
-    $ mkvirtualenv AppDynamicsREST
-    $ pip install AppDynamicsREST
+    $ mkvirtualenv AppDynamicsRESTx
+    $ pip install AppDynamicsRESTx

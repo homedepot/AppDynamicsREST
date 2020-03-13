@@ -22,7 +22,7 @@ def read(*filenames, **kwargs):
     return sep.join(buf)
 
 
-setup(name='AppDynamicsREST',
+setup(name='AppDynamicsRESTx',
       version=appd.__version__,
       description='AppDynamics REST API Library',
       long_description=read('README.rst'),
@@ -30,7 +30,7 @@ setup(name='AppDynamicsREST',
       author_email='tradel@appdynamics.com',
       maintainer='Mike Phillipson',
       maintainer_email='MICHAEL_PHILLIPSON1@homedepot.com',
-      url='https://github.com/homedepot/AppDynamicsREST',
+      url='https://github.com/homedepot/AppDynamicsRESTx',
       packages=['appd','appd.model'],
       platforms='any',
       package_data={'': ['README.rst', 'data/*', 'examples/*', 'templates/*']},
